@@ -10,49 +10,49 @@ public class SimulationDriver {
 
         Random rand = new Random();
 
+        /* SINGLE CHOICE QUESTION */
         System.out.println("\n");
         String question = "What's my favorite color?";
         String correctAnswer = "Blue";
+        
         List<String> incorrectAnswers = new ArrayList<>(Arrays.asList("Red", "Green", "Orange", "Yellow", "Purple"));
         Question singleAnswerQ = new SingleChoiceQuestion(question, correctAnswer, incorrectAnswers);
         System.out.println("Question: " + singleAnswerQ.getQuestion());
         System.out.println("Numbered choices: " + singleAnswerQ.getAnswerList());
         VotingService votingService = new VotingService(singleAnswerQ);
-        for (int i = 0; i < 100; i++) {  //add students to voting service
+        for (int i = 0; i < 100; i++) {                   // add students to voting service
             votingService.addStudent(new Student());
         }
-        for (int i = 0; i < 100; i++) {  //students vote
+        for (int i = 0; i < 100; i++) {                 // students vote (randomly generated vote)
             Student student = votingService.getStudent(i);
             student.setAnswer(new Answer(rand.nextInt(singleAnswerQ.getNumberOfChoices())+1));
             student.submitAnswer();
-            //System.out.println(student.getSubmittedAnswer().getSingleAnswer());
         }
         votingService.stopVotingPoll();
         votingService.printStats();
         System.out.println("\n");
+
         //add students to voting service
         //students vote
         //voting service changes question
         
-
+        //TODO: some students submit more than once; see how many students got Q right
         
-
+        /* MULTIPLE CHOICE QUESTION */
         String question2 = "What NBA teams do I like to watch?";
         List<String> correctAnswers = new ArrayList<>(Arrays.asList("Lakers", "Mavericks", "Spurs"));
         List<String> incorrectAnswers2 = new ArrayList<>(Arrays.asList("Warriors", "Clippers", "Wolves", "Grizlies", "Nets"));
+        
         Question multipleAnswerQ = new MultipleChoiceQuestion(question2, correctAnswers, incorrectAnswers2);
         votingService.changeQuestion(multipleAnswerQ);
         System.out.println("Multiple Choice Question:" + multipleAnswerQ.getQuestion());
         System.out.println("Numbered choices: " + multipleAnswerQ.getAnswerList());
-        /*for (int i = 0; i < 100; i++) {  //add students to voting service
-            votingService.addStudent(new Student());
-        } */
-        for (int i = 0; i < 100; i++) {  //students vote
-            Student student = votingService.getStudent(i);
-            int numOfSelections = rand.nextInt(multipleAnswerQ.getNumberOfChoices())+1;
+        for (int i = 0; i < 100; i++) {  // students vote; 
+            Student student = votingService.getStudent(i);   
+            int numOfSelections = rand.nextInt(multipleAnswerQ.getNumberOfChoices())+1;  // randomly generate number of choices a student chooses
             List<Integer> studentAnswers = new ArrayList<>();
             int maxChoices = multipleAnswerQ.getNumberOfChoices();
-            for (int j = 0; j < numOfSelections; j++) {
+            for (int j = 0; j < numOfSelections; j++) {        // randomly pick a choice 
                 int randAnswer = rand.nextInt(maxChoices)+1;
                 if (studentAnswers.contains(randAnswer)) {
                     for (int k = 0; k < maxChoices; k++) {
@@ -69,7 +69,6 @@ public class SimulationDriver {
                     studentAnswers.add(randAnswer);
                 }
             }
-            //System.out.println(studentAnswers);
             student.setAnswer(new Answer(studentAnswers));
             student.submitAnswer();
             

@@ -8,19 +8,19 @@ public class VotingService {
     
     private Question question;
     private HashMap<Integer, Integer> stats;
-    private HashMap<String, Boolean> correctStudents;
-    private HashMap<String, Boolean> incorrectStudents;
+    private List<String> correctStudents;
+    private List<String> incorrectStudents;
     private List<Student> students;
 
     public VotingService(Question question) {
         this.question = question;
         this.students = new ArrayList<Student>();
         this.stats = new HashMap<>();
-        this.correctStudents = new HashMap<>();
-        this.incorrectStudents = new HashMap<>();
+        this.correctStudents = new ArrayList<>();
+        this.incorrectStudents = new ArrayList<>();
     }
     
-    public HashMap<Integer, Integer> stopVotingPoll() {
+    public void stopVotingPoll() {
         String questionType = question.getQuestionType();
         //System.out.println(questionType);
         switch (questionType) {
@@ -31,11 +31,6 @@ public class VotingService {
                 this.multipleAnswerCheck();
                 break;
         }
-        for (int i = 0; i < stats.size(); i++) {
-            //do something with stats here maybe for fun
-        }
-
-        return null;
         
     }
 
@@ -44,6 +39,8 @@ public class VotingService {
             Student student = students.get(i);
             Answer studentAnswer = student.getSubmittedAnswer();
             boolean result = question.checkAnswer(studentAnswer);
+            if (result) correctStudents.add(student.getID());
+            else incorrectStudents.add(student.getID());
             String questionType = question.getQuestionType();  ///////////
             if (!stats.containsKey(studentAnswer.getSingleAnswer())) {
                 stats.put(studentAnswer.getSingleAnswer(), 0);
@@ -59,7 +56,8 @@ public class VotingService {
             Student student = students.get(i);
             Answer studentAnswer = student.getSubmittedAnswer();
             boolean result = question.checkAnswer(studentAnswer);
-            //System.out.println(studentAnswer.getMultipleAnswer());
+            if (result) correctStudents.add(student.getID());
+            else incorrectStudents.add(student.getID());
             for (int j = 0; j < studentAnswer.getMultipleAnswer().size(); j++) {
                 if (!stats.containsKey(studentAnswer.getMultipleAnswer().get(j))) {
                     stats.put(studentAnswer.getMultipleAnswer().get(j), 0);
@@ -74,11 +72,13 @@ public class VotingService {
 
 
     public void printStats() {
-        System.out.println("Answers per question: " + stats);
+        System.out.println("\nAnswers per question: " + stats);
+        System.out.println("Correct answer was: ");
+        System.out.println("\n" + correctStudents.size() + " students got it correct (List of student ID's): \n\n" + correctStudents);
+        System.out.println("\n" + incorrectStudents.size() + " students got it incorrect (List of student ID's): \n\n" + incorrectStudents);
     }
 
     public void changeQuestion(Question newQuestion) {
-        //students.clear();
         this.question = newQuestion;
         stats.clear();
         for (int i = 0; i < students.size(); i++) {
@@ -86,13 +86,12 @@ public class VotingService {
         }
     }
 
-    public void addStudentVote(int studentIndex) {
-        //students.set(studentIndex, students.get(studentIndex));
-    }
+    /*public void addStudentVote(int studentIndex) {
+        // make post request to API if web app 
+    } */
 
     public void addStudent(Student student) {
-        students.add(student);
-        //student.
+        students.add(student);   
     }
 
     public Student getStudent(int index) {

@@ -70,41 +70,6 @@ public class SingleChoiceQuestion implements Question {
                 answerKey.put(i+1, false);
             }
         }
-        // randomize number from 0-length
-        // add to answerkey hashmap
-        // check if in answer key before add
-        // 
-
-        
-        /* 
-        Random rand = new Random();
-        int numOfIncorrectAdded = 0; 
-        int numOfCorrectAdded = 0;
-        int numOfChoices = 1 + incorrectChoices.length; //make this more random
-        for (int i = 0; i < numOfChoices; i++) {
-            if (numOfCorrectAdded == 1) {
-                answerList.put(i, incorrectChoices[numOfIncorrectAdded]);
-                answerKey.put(i, false);
-                numOfIncorrectAdded += 1;
-            }
-            else if (numOfIncorrectAdded == incorrectChoices.length) {
-                answerList.put(i, correctChoice);
-                answerKey.put(i, true);
-                numOfCorrectAdded += 1;
-            }
-            else if (rand.nextBoolean()) {
-                answerList.put(i, correctChoice);
-                answerKey.put(i, true);
-                numOfCorrectAdded += 1;
-            }
-            else {
-                answerList.put(i, incorrectChoices[numOfIncorrectAdded]);
-                answerKey.put(i, false);
-                numOfIncorrectAdded += 1;
-            }
-        }
-        System.out.println(answerList.size());
-        */
     }
 
     

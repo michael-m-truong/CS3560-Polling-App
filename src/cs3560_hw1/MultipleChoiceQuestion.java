@@ -40,12 +40,8 @@ public class MultipleChoiceQuestion implements Question{
     }
 
     @Override
-    public boolean checkAnswer(Answer questionNums) {
-        List<Integer> answer = questionNums.getMultipleAnswer();
-        for (int i = 0; i < correctChoices.size(); i++) {
-            
-        }
-        return false;
+    public boolean checkAnswer(HashMap<Integer, Boolean> studentAnswer) {
+        return answerKey.equals(studentAnswer);
     }
 
     @Override

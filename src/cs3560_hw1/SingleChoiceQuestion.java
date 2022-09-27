@@ -23,9 +23,8 @@ public class SingleChoiceQuestion implements Question {
     }
 
     @Override
-    public boolean checkAnswer(Answer questionNum) {
-        int answer = questionNum.getSingleAnswer();
-        return answerKey.get(answer);
+    public boolean checkAnswer(HashMap<Integer, Boolean> studentAnswer) {
+        return answerKey.equals(studentAnswer);
     }
 
     @Override

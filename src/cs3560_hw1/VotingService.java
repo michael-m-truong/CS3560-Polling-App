@@ -18,55 +18,27 @@ public class VotingService {
         this.stats = new HashMap<>();
         this.correctStudents = new ArrayList<>();
         this.incorrectStudents = new ArrayList<>();
+
+        for (int i = 1; i <= question.getNumberOfChoices(); i++) {
+            stats.put(i, 0);
+        }
     }
     
     public void stopVotingPoll() {
-        String questionType = question.getQuestionType();
-        //System.out.println(questionType);
-        switch (questionType) {
-            case "SingleChoiceQuestion":
-                this.singleAnswerCheck();
-                break;
-            case "MultipleChoiceQuestion":
-                this.multipleAnswerCheck();
-                break;
-        }
-        
+        this.answerCheck();   
     }
 
-    private void singleAnswerCheck() {
+    private void answerCheck() {
         for (int i = 0; i < students.size(); i++) {
             Student student = students.get(i);
-            Answer studentAnswer = student.getSubmittedAnswer();
+            HashMap<Integer, Boolean> studentAnswer = student.getSubmittedAnswer();
             boolean result = question.checkAnswer(studentAnswer);
             if (result) correctStudents.add(student.getID());
             else incorrectStudents.add(student.getID());
-            String questionType = question.getQuestionType();  ///////////
-            if (!stats.containsKey(studentAnswer.getSingleAnswer())) {
-                stats.put(studentAnswer.getSingleAnswer(), 0);
+            for (int j = 1; j <= studentAnswer.size(); j++) {
+                if (!studentAnswer.get(j)) continue;
+                else stats.replace(j, stats.get(j)+1);
             }
-            else {
-                stats.replace(studentAnswer.getSingleAnswer(), stats.get(studentAnswer.getSingleAnswer())+1);
-            }
-        }
-    }
-
-    private void multipleAnswerCheck() {
-        for (int i = 0; i < students.size(); i++) {
-            Student student = students.get(i);
-            Answer studentAnswer = student.getSubmittedAnswer();
-            boolean result = question.checkAnswer(studentAnswer);
-            if (result) correctStudents.add(student.getID());
-            else incorrectStudents.add(student.getID());
-            for (int j = 0; j < studentAnswer.getMultipleAnswer().size(); j++) {
-                if (!stats.containsKey(studentAnswer.getMultipleAnswer().get(j))) {
-                    stats.put(studentAnswer.getMultipleAnswer().get(j), 0);
-                }
-                else {
-                    stats.replace(studentAnswer.getMultipleAnswer().get(j), stats.get(studentAnswer.getMultipleAnswer().get(j))+1);
-                }
-            }
-            
         }
     }
 
@@ -81,8 +53,16 @@ public class VotingService {
     public void changeQuestion(Question newQuestion) {
         this.question = newQuestion;
         stats.clear();
+        correctStudents.clear();
+        incorrectStudents.clear();
+        //System.out.println(students.size());
         for (int i = 0; i < students.size(); i++) {
-            students.get(i).setAnswer(null);
+            Student student = students.get(i);
+            student.clearAnswer();
+            student.changeQuestion(newQuestion);
+        }
+        for (int i = 1; i <= question.getNumberOfChoices(); i++) {
+            stats.put(i, 0);
         }
     }
 

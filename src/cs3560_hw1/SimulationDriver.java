@@ -21,11 +21,11 @@ public class SimulationDriver {
         System.out.println("Numbered choices: " + singleAnswerQ.getAnswerList());
         VotingService votingService = new VotingService(singleAnswerQ);
         for (int i = 0; i < 100; i++) {                   // add students to voting service
-            votingService.addStudent(new Student());
+            votingService.addStudent(new Student(singleAnswerQ));
         }
         for (int i = 0; i < 100; i++) {                 // students vote (randomly generated vote)
             Student student = votingService.getStudent(i);
-            student.setAnswer(new Answer(rand.nextInt(singleAnswerQ.getNumberOfChoices())+1));
+            student.setAnswer(Arrays.asList(rand.nextInt(singleAnswerQ.getNumberOfChoices())+1));
             student.submitAnswer();
         }
         votingService.stopVotingPoll();
@@ -40,8 +40,8 @@ public class SimulationDriver {
         
         /* MULTIPLE CHOICE QUESTION */
         String question2 = "What NBA teams do I like to watch?";
-        List<String> correctAnswers = new ArrayList<>(Arrays.asList("Lakers", "Mavericks", "Spurs"));
-        List<String> incorrectAnswers2 = new ArrayList<>(Arrays.asList("Warriors", "Clippers", "Wolves", "Grizlies", "Nets"));
+        List<String> correctAnswers = new ArrayList<>(Arrays.asList("Lakers", "Mavericks"));
+        List<String> incorrectAnswers2 = new ArrayList<>(Arrays.asList("Warriors"));
         
         Question multipleAnswerQ = new MultipleChoiceQuestion(question2, correctAnswers, incorrectAnswers2);
         votingService.changeQuestion(multipleAnswerQ);
@@ -69,7 +69,7 @@ public class SimulationDriver {
                     studentAnswers.add(randAnswer);
                 }
             }
-            student.setAnswer(new Answer(studentAnswers));
+            student.setAnswer(studentAnswers);
             student.submitAnswer();
             
         }

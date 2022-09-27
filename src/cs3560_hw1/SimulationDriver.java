@@ -10,6 +10,9 @@ public class SimulationDriver {
 
         Random rand = new Random();
 
+        // TODO: 1) some students vote more than once 2) polymorphism test 
+        // 3) abstract class Question 4) get correct answer 5) interface for student or something 6) comment code
+
         /* SINGLE CHOICE QUESTION */
         System.out.println("\n");
         String question = "What's my favorite color?";

@@ -16,6 +16,6 @@ public interface Question {
 
     int getNumberOfChoices();
 
-    boolean checkAnswer(HashMap<Integer, Boolean> questionNum);  //different implementation to check answer based on mc or single, thus interface
+    boolean checkAnswer(HashMap<Integer, Boolean> questionNum);
 
 }

@@ -11,6 +11,7 @@ public class VotingService {
     private List<String> correctStudents;
     private List<String> incorrectStudents;
     private List<Student> students;
+    private List<Integer> correctAnswer;
 
     public VotingService(Question question) {
         this.question = question;

@@ -13,30 +13,31 @@ public class MultipleChoiceQuestion implements Question{
     private HashMap<Integer, Boolean> answerKey;
     private List<String> incorrectChoices;
     private List<String> correctChoices;
+    private List<Integer> correctNumberChoices;
 
-    public MultipleChoiceQuestion(String question, List<String> correctAnswers, List<String> incorrectAnswers2) {
+    public MultipleChoiceQuestion(String question, List<String> correctChoices, List<String> incorrectChoices) {
         this.question = question;
-        this.correctChoices = correctAnswers;
-        this.incorrectChoices = incorrectAnswers2;
+        this.correctChoices = correctChoices;
+        this.incorrectChoices = incorrectChoices;
         this.answerList = new HashMap<>();
         this.answerKey = new HashMap<>();
+        this.correctNumberChoices = new ArrayList<>();
         this.randomizeChoiceOrder();
     }
 
     @Override
-    public String getQuestion() {
+    public String getQuestion() { 
         return question;
     }
 
     @Override
-    public HashMap<Integer, String> getAnswerList() {
+    public HashMap<Integer, String> getAnswerList() {  
         return answerList;
     }
 
     @Override
-    public void modifyQuestion(String newQuestion) {
+    public void modifyQuestion(String newQuestion) { 
         question = newQuestion;
-        
     }
 
     @Override
@@ -45,16 +46,21 @@ public class MultipleChoiceQuestion implements Question{
     }
 
     @Override
-    public String getQuestionType() {
-        return "MultipleChoiceQuestion";
-    }
-
-    @Override
     public int getNumberOfChoices() {
         return incorrectChoices.size() + correctChoices.size();
     }
 
-    private void randomizeChoiceOrder() {
+    @Override
+    public List<Integer> getAnswer() {
+        return correctNumberChoices; 
+    }
+
+    @Override
+    public String getQuestionType() {
+        return "Multiple Choice Question";
+    }
+
+    private void randomizeChoiceOrder() {    // example of abstraction; client should not have to worry about randomizing choice order
         Random rand =  new Random();
         for (int i = 0; i < correctChoices.size(); i++) {
             int randCorrectNum = rand.nextInt(incorrectChoices.size() + correctChoices.size())+1;
@@ -74,6 +80,7 @@ public class MultipleChoiceQuestion implements Question{
                 answerList.put(randCorrectNum, correctChoices.get(i));
                 answerKey.put(randCorrectNum, true);
             }
+            correctNumberChoices.add(randCorrectNum);
         }
 
         Collections.shuffle(incorrectChoices);

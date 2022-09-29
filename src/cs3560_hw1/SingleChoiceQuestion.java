@@ -1,5 +1,6 @@
 package cs3560_hw1;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +11,17 @@ public class SingleChoiceQuestion implements Question {
     private String question;
     private HashMap<Integer, String> answerList;
     private HashMap<Integer, Boolean> answerKey;
-    private List<String> incorrectChoices;
-    private String correctChoice;
+    private List<String> incorrectChoices;  //change to answer
+    private String correctChoice; //change to answer
+    private List<Integer> correctNumberChoice;
 
-    public SingleChoiceQuestion(String question, String correctChoice, List<String> incorrectAnswers) {
+    public SingleChoiceQuestion(String question, String correctChoice, List<String> incorrectChoices) {
         this.question = question;
         this.correctChoice = correctChoice;
-        this.incorrectChoices = incorrectAnswers;
+        this.incorrectChoices = incorrectChoices;
         this.answerList = new HashMap<>();
         this.answerKey = new HashMap<>();
+        this.correctNumberChoice = new ArrayList<>();
         this.randomizeChoiceOrder();
     }
 
@@ -43,19 +46,24 @@ public class SingleChoiceQuestion implements Question {
     }
 
     @Override
-    public String getQuestionType() {
-        return "SingleChoiceQuestion";
-    }
-
-    @Override
     public int getNumberOfChoices() {
         return incorrectChoices.size() + 1;
     }
 
+    @Override
+    public List<Integer> getAnswer() {
+        return correctNumberChoice;
+    }
 
-    private void randomizeChoiceOrder() {
-        Random rand =  new Random();
+    @Override
+    public String getQuestionType() {
+        return "Single Choice Question";
+    }
+
+    private void randomizeChoiceOrder() {     // example of abstraction; client should not have to worry about randomizing choice order
+        Random rand =  new Random(); 
         int randCorrectNum = rand.nextInt(1+incorrectChoices.size())+1;
+        correctNumberChoice.add(randCorrectNum);
         answerList.put(randCorrectNum, correctChoice);
         answerKey.put(randCorrectNum, true);
         Collections.shuffle(incorrectChoices);

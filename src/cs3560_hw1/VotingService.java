@@ -6,12 +6,11 @@ import java.util.List;
 
 public class VotingService {
     
-    private Question question;
+    private Question question;                 // example of composition
     private HashMap<Integer, Integer> stats;
     private List<String> correctStudents;
     private List<String> incorrectStudents;
     private List<Student> students;
-    private List<Integer> correctAnswer;
 
     public VotingService(Question question) {
         this.question = question;
@@ -20,16 +19,18 @@ public class VotingService {
         this.correctStudents = new ArrayList<>();
         this.incorrectStudents = new ArrayList<>();
 
-        for (int i = 1; i <= question.getNumberOfChoices(); i++) {
+        for (int i = 1; i <= question.getNumberOfChoices(); i++) {  // initialize stats hashmap to tally student vote for each question
             stats.put(i, 0);
         }
     }
     
     public void stopVotingPoll() {
+        System.out.println(question.getQuestionType() + ": " + question.getQuestion());
+        System.out.println("Numbered choices: " + question.getAnswerList());
         this.answerCheck();   
     }
 
-    private void answerCheck() {
+    private void answerCheck() {                      // check all student votes
         for (int i = 0; i < students.size(); i++) {
             Student student = students.get(i);
             HashMap<Integer, Boolean> studentAnswer = student.getSubmittedAnswer();
@@ -46,36 +47,31 @@ public class VotingService {
 
     public void printStats() {
         System.out.println("\nAnswers per question: " + stats);
-        System.out.println("Correct answer was: ");
+        System.out.println("Correct number choice was: " + question.getAnswer());
         System.out.println("\n" + correctStudents.size() + " students got it correct (List of student ID's): \n\n" + correctStudents);
         System.out.println("\n" + incorrectStudents.size() + " students got it incorrect (List of student ID's): \n\n" + incorrectStudents);
     }
 
-    public void changeQuestion(Question newQuestion) {
-        this.question = newQuestion;
-        stats.clear();
+    public void changeQuestion(Question newQuestion) {   
+        this.question = newQuestion; 
+        stats.clear();                 // clear because new question
         correctStudents.clear();
         incorrectStudents.clear();
-        //System.out.println(students.size());
         for (int i = 0; i < students.size(); i++) {
             Student student = students.get(i);
             student.clearAnswer();
             student.changeQuestion(newQuestion);
         }
-        for (int i = 1; i <= question.getNumberOfChoices(); i++) {
+        for (int i = 1; i <= question.getNumberOfChoices(); i++) {  // initialize stats hashmap to tally student vote for each question
             stats.put(i, 0);
         }
     }
 
-    /*public void addStudentVote(int studentIndex) {
-        // make post request to API if web app 
-    } */
-
-    public void addStudent(Student student) {
+    public void addStudent(Student student) {   // add student to voting service
         students.add(student);   
     }
 
-    public Student getStudent(int index) {
+    public Student getStudent(int index) {   // used to randomly generate student vote
         return students.get(index);
     }
 }
